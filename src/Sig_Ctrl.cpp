@@ -22,6 +22,7 @@
 //--------------------------Bulb Status-------------------------------
 #define SOLID  1
 #define FLASH  2
+#define OFF    3
 
 int bulb1_state = SOLID;
 int bulb2_state = SOLID;
@@ -43,6 +44,9 @@ Button toggle4(BTN4, PULLUP, INVERT, DEBOUNCE_MS);
 //--------------------------Functions-------------------------------
 void change_flashing();
 void change_color();
+void primary_relay_ctrl(int state, int color);
+void secondary_relay_ctrl(int state, int color);
+
 
 void setup(void)
 {
@@ -63,8 +67,8 @@ void loop(void)
 
   change_flashing();
   change_color();
-
-
+  primary_relay_ctrl(bulb1_state, bulb1_color);
+  secondary_relay_ctrl(bulb2_state, bulb2_color);
 }
 
 void change_flashing()
@@ -80,9 +84,13 @@ void change_flashing()
     {
       bulb1_state = SOLID;
     }
-    if (b1 == 2)
+    else if (b1 == 2)
     {
       bulb1_state = FLASH;
+    }
+    else if (b1 == 3)
+    {
+      bulb1_state = OFF;
     }
     else
     {
@@ -97,9 +105,13 @@ void change_flashing()
     {
       bulb2_state = SOLID;
     }
-    if (b2 == 2)
+    else if (b2 == 2)
     {
       bulb2_state = FLASH;
+    }
+    else if (b1 == 3)
+    {
+      bulb2_state = OFF;
     }
     else
     {
@@ -121,11 +133,11 @@ void change_color()
     {
       bulb1_color = RED;
     }
-    if (b1 == 2)
+    else if (b1 == 2)
     {
       bulb1_color = YELLOW;
     }
-    if (b1 == 3)
+    else if (b1 == 3)
     {
       bulb1_color = GREEN;
     }
@@ -142,11 +154,11 @@ void change_color()
     {
       bulb2_color = RED;
     }
-    if (b2 == 2)
+    else if (b2 == 2)
     {
       bulb2_color = YELLOW;
     }
-    if (b1 == 3)
+    else if (b2 == 3)
     {
       bulb2_color = GREEN;
     }
@@ -157,12 +169,66 @@ void change_color()
   }
 }
 
-void primary_relay_ctrl()
+void primary_relay_ctrl(int state, int color)
 {
+  if(state == OFF)
+  {
+    digitalWrite(RELAY_1, LOW);
+  }
+  else if(state == SOLID)
+  {
+    digitalWrite(RELAY_1, HIGH);
+  }
+  else if(state == FLASH)
+  {
+    analogWrite(RELAY_1,127);
+  }
 
+  if(color == RED)
+  {
+    digitalWrite(RELAY_2, LOW);
+    digitalWrite(RELAY_3, LOW);
+  }
+  else if(color == YELLOW)
+  {
+    digitalWrite(RELAY_2, HIGH);
+    digitalWrite(RELAY_3, LOW);
+  }
+  else if(color == GREEN)
+  {
+    digitalWrite(RELAY_2, LOW);
+    digitalWrite(RELAY_3, HIGH);
+  }
 }
 
-void secondary_relay_ctrl()
+void secondary_relay_ctrl(int state, int color)
 {
+  if(state == OFF)
+  {
+    digitalWrite(RELAY_4, LOW);
+  }
+  else if(state == SOLID)
+  {
+    digitalWrite(RELAY_4, HIGH);
+  }
+  else if(state == FLASH)
+  {
+    analogWrite(RELAY_4,127);
+  }
 
+  if(color == RED)
+  {
+    digitalWrite(RELAY_5, LOW);
+    digitalWrite(RELAY_6, LOW);
+  }
+  else if(color == YELLOW)
+  {
+    digitalWrite(RELAY_5, HIGH);
+    digitalWrite(RELAY_6, LOW);
+  }
+  else if(color == GREEN)
+  {
+    digitalWrite(RELAY_5, LOW);
+    digitalWrite(RELAY_6, HIGH);
+  }
 }
