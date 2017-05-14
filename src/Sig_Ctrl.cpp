@@ -1,10 +1,10 @@
 #include <Arduino.h>
 #include <Button.h>
 //--------------------------Button Pins-------------------------------
-#define BTN1 1
-#define BTN2 2
-#define BTN3 3
-#define BTN4 4 //change these values
+#define BTN1 3                      // xx
+#define BTN2 2                      // xx
+#define BTN3 1                      // xx
+#define BTN4 0 //pin values for rev1a  xx  for 1b
 
 //--------------------------Button Setup-------------------------------
 #define PULLUP true
@@ -12,12 +12,12 @@
 #define DEBOUNCE_MS 20
 
 //--------------------------Relay Pins-------------------------------
-#define RELAY_1 5
-#define RELAY_2 6
-#define RELAY_3 7
-#define RELAY_4 8
-#define RELAY_5 9
-#define RELAY_6 10 //change these values
+#define RELAY_1 4                     //  xx
+#define RELAY_2 29                    //  xx
+#define RELAY_3 25                    //  xx
+#define RELAY_4 8                     //  xx
+#define RELAY_5 9                     //  xx
+#define RELAY_6 10 //pin values for rev1a xx for 1b
 
 //--------------------------Bulb Status-------------------------------
 #define SOLID  1
@@ -56,19 +56,26 @@ void setup(void)
   pinMode(RELAY_4, OUTPUT);
   pinMode(RELAY_5, OUTPUT);
   pinMode(RELAY_6, OUTPUT);
+
+  Serial.begin(9600);
 }
 
 void loop(void)
 {
-  toggle1.read();
-  toggle2.read();
-  toggle3.read();
-  toggle4.read();
+  toggle1.read(); // primary   flash
+  toggle2.read(); // secondary flash
+  toggle3.read(); // primary   color
+  toggle4.read(); // secondary color
 
   change_flashing();
   change_color();
   primary_relay_ctrl(bulb1_state, bulb1_color);
   secondary_relay_ctrl(bulb2_state, bulb2_color);
+
+  Serial.print("1st bulb state"); Serial.println(bulb1_state);
+  Serial.print("2nd bulb state"); Serial.println(bulb2_state);
+  Serial.print("1st bulb color"); Serial.println(bulb1_color);
+  Serial.print("2nd bulb color"); Serial.println(bulb2_color);
 }
 
 void change_flashing()
@@ -181,7 +188,7 @@ void primary_relay_ctrl(int state, int color)
   }
   else if(state == FLASH)
   {
-    analogWrite(RELAY_1,127);
+    analogWrite(RELAY_1,127); //call a blink function instead?
   }
 
   if(color == RED)
@@ -213,7 +220,7 @@ void secondary_relay_ctrl(int state, int color)
   }
   else if(state == FLASH)
   {
-    analogWrite(RELAY_4,127);
+    analogWrite(RELAY_4,127); //call a blink function instead?
   }
 
   if(color == RED)
