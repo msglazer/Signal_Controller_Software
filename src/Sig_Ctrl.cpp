@@ -58,8 +58,10 @@ Button toggle3(BTN3, PULLUP, INVERT, DEBOUNCE_MS);
 Button toggle4(BTN4, PULLUP, INVERT, DEBOUNCE_MS);
 
 //--------------------------Functions-------------------------------
-void change_flashing();
-void change_color();
+void change_primary_flashing();
+void change_secondary_flashing();
+void change_primary_color();
+void change_secondary_color();
 void primary_relay_ctrl(int state, int color);
 void secondary_relay_ctrl(int state, int color);
 void relay_flash();
@@ -86,106 +88,113 @@ void loop(void)
   toggle3.read(); // primary   color
   toggle4.read(); // secondary color
 
-  change_flashing();
-  change_color();
+  change_primary_flashing();
+  change_secondary_flashing();
+  change_primary_color();
+  change_secondary_color();
   primary_relay_ctrl(bulb1_state, bulb1_color);
   secondary_relay_ctrl(bulb2_state, bulb2_color);
-
-  /*Serial.print("1st bulb state"); Serial.println(bulb1_state);
-  Serial.print("2nd bulb state"); Serial.println(bulb2_state);
-  Serial.print("1st bulb color"); Serial.println(bulb1_color);
-  Serial.print("2nd bulb color"); Serial.println(bulb2_color);*/
 }
 
-void change_flashing()
+void change_primary_flashing()
 {
   if (toggle1.wasReleased())
   {
     b1++;
     Serial.print("button 1 pressed"); Serial.println(b1);
-    if (b1 == 1)
-    {
-      bulb1_state = SOLID;
-    }
-    else if (b1 == 2)
-    {
-      bulb1_state = FLASH;
-    }
-    else if (b1 == 3)
-    {
-      bulb1_state = OFF;
-    }
-    else
+    if (b1 == 4)
     {
       b1 = 0;
     }
   }
+
+  if (b1 == 1)
+  {
+    bulb1_state = SOLID;
+  }
+  else if (b1 == 2)
+  {
+    bulb1_state = FLASH;
+  }
+  else if (b1 == 3)
+  {
+    bulb1_state = OFF;
+  }
+}
+
+void change_secondard_flashing()
+{
   if (toggle2.wasReleased())
   {
     b2++;
     Serial.print("button 2 pressed"); Serial.println(b2);
-    if (b2 == 1)
-    {
-      bulb2_state = SOLID;
-    }
-    else if (b2 == 2)
-    {
-      bulb2_state = FLASH;
-    }
-    else if (b2 == 3)
-    {
-      bulb2_state = OFF;
-    }
-    else
+    if (b2 == 4)
     {
       b2 = 0;
     }
   }
+  if (b2 == 1)
+  {
+    bulb2_state = SOLID;
+  }
+  else if (b2 == 2)
+  {
+    bulb2_state = FLASH;
+  }
+  else if (b2 == 3)
+  {
+    bulb2_state = OFF;
+  }
 }
 
-void change_color()
+
+void change_primary_color()
 {
   if (toggle3.wasReleased())
   {
     b3++;
     Serial.print("button 3 pressed"); Serial.println(b3);
-    if (b3 == 1)
-    {
-      bulb1_color = RED;
-    }
-    else if (b3 == 2)
-    {
-      bulb1_color = YELLOW;
-    }
-    else if (b3 == 3)
-    {
-      bulb1_color = GREEN;
-    }
-    else
+    if (b3 == 4)
     {
       b3 = 0;
     }
   }
+  if (b3 == 1)
+  {
+    bulb1_color = RED;
+  }
+  else if (b3 == 2)
+  {
+    bulb1_color = YELLOW;
+  }
+  else if (b3 == 3)
+  {
+    bulb1_color = GREEN;
+  }
+}
+
+void change_secondary_color()
+{
   if (toggle4.wasReleased())
   {
     b4++;
     Serial.print("button 4 pressed"); Serial.println(b4);
-    if (b4 == 1)
-    {
-      bulb2_color = RED;
-    }
-    else if (b4 == 2)
-    {
-      bulb2_color = YELLOW;
-    }
-    else if (b4 == 3)
-    {
-      bulb2_color = GREEN;
-    }
-    else
+    if (b4 == 4)
     {
       b4 = 0;
     }
+  }
+  if (b4 == 1)
+  {
+    bulb2_color = RED;
+  }
+  else if (b4 == 2)
+  {
+    bulb2_color = YELLOW;
+  }
+  else if (b4 == 3)
+  {
+    bulb2_color = GREEN;
   }
 }
 
